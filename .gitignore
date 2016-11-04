@@ -89,3 +89,4 @@ ENV/
 .ropeproject
 
 .idea
+/app4_journal/journals/default.jrl
