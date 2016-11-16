@@ -1,4 +1,5 @@
 from app10_movie_search.movie_client import MovieClient
+import requests.exceptions
 
 
 def main():
@@ -17,9 +18,21 @@ def search_event_loop():
     search = 'ONCE_THROUGH_LOOP'
 
     while search != 'x':
-        search = input('Title search text (x to exit): ')
-        if search != 'x':
-            client = MovieClient(search)
+        try:
+            search = input('Title search text (x to exit): ')
+            if search != 'x':
+                client = MovieClient(search)
+
+                results = client.perform_search()
+                print('Found {} results.'.format(len(results)))
+                for r in results:
+                    print('{} -- {}'.format(r.Year, r.Title))
+        except requests.exceptions.ConnectionError as ce:
+            print('ERROR: Cannot search, your network is down.')
+        except ValueError as ve:
+            print('ERROR: Your search string is invalid: {}'.format(ve))
+        except Exception as x:
+            print('Yikes that sucked: {}.format(x)'.format(x))
 
     print('Exiting...')
 
